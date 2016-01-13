@@ -1,0 +1,167 @@
+{% extends "templates/layouts/base.html" %} {% block title %}Statistik Pengunjung Pustaka Unsyiah{% endblock %}
+{% block head %}
+	{{ super() }}
+	<!-- Fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	{% endblock %} <!-- ./block head-->
+	{% block content %}
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/">Statistik Kunjungan Pengguna pada {{situs}}</a>
+				</div>
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="opac.unsyiah.ac.id" target="_blank">Kunjungi {{situs}} >></a></li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-primary">
+						<div class="panel-heading">Perbandingan jumlah Pengguna dan <i>Pageviews</i></div>
+						<div class="panel-body">
+							<div id="chart-1-container"></div>
+						</div>
+					</div>
+				</div>
+				</div><!-- row -->
+				<div class="row">
+							<div class="col-md-6">
+								<div class="panel panel-danger">
+									<div class="panel-heading">10 Kota Asal Pengunjung Terbanyak</div>
+									<div class="panel-body">
+										
+										<div id="chart-4-container"></div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="panel panel-success">
+									<div class="panel-heading">10 Negara Asal Pengunjung Terbanyak</div>
+									<div class="panel-body">
+										<div id="chart-2-container"></div>
+									</div>
+								</div>
+							</div>
+							</div><!-- row -->
+							<div class="alert alert-warning fade in">
+	    		<a href="#" class="close" data-dismiss="alert" aria-label="close"></a>
+	    		<strong>Perhatian!</strong> Rentang waktu yang digunakan pada data statistik berikut adalah 1 tahun (365 hari).
+	  		</div>
+						</div>
+					</div>
+				</div>
+			{% endblock content%}
+			{% block js %}
+				<script>
+					(function(w,d,s,g,js,fs){
+						g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
+						js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
+						js.src='https://apis.google.com/js/platform.js';
+						fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
+						}(window,document,'script'));
+				</script>
+				<script>
+					gapi.analytics.ready(function() {
+						/**
+						* Authorize the user with an access token obtained server side.
+						*/
+						gapi.analytics.auth.authorize({
+							'serverAuth': {
+								'access_token': '{{ access_token }}'
+							}
+						});
+						/**
+						* Creates a new DataChart instance showing sessions over the past 30 days.
+						* It will be rendered inside an element with the id "chart-1-container".
+						*/
+						/**
+						* View id untuk masing - masing hasil Google Analytics yang sudah ada
+						* dan akan ditampilkan
+						* @type {String}
+						*/
+						var id =  'ga:85051245'
+
+						var dataChart1 = new gapi.analytics.googleCharts.DataChart({
+							query: {
+								'ids': id, // The Demos & Tools website view.
+								'start-date': '365daysAgo',
+								'end-date': 'yesterday',
+								'metrics': 'ga:pageviews,ga:users',
+								'dimensions': 'ga:date'
+							},
+							chart: {
+								'container': 'chart-1-container',
+								'type': 'LINE',
+								'options': {
+									'width': '100%'
+								}
+							}
+						});
+						dataChart1.execute();
+						/**
+						* Datachart untuk menampilkan asal negara pengunjung
+						* Skala perhitungan dimulai dari 30 hari yang lalu
+						*/
+						/**
+					* Create the second DataChart for top countries over the past 30 days.
+					* It will be rendered inside an element with the id "chart-2-container".
+					*/
+					var dataChart2 = new gapi.analytics.googleCharts.DataChart({
+						query: {
+							'ids': id, // The Demos & Tools website view.
+							metrics: 'ga:sessions',
+							dimensions: 'ga:country',
+							'start-date': '365daysAgo',
+							'end-date': 'yesterday',
+							'max-results': 10,
+							sort: '-ga:sessions'
+						},
+						chart: {
+							container: 'chart-2-container',
+							type: 'PIE',
+							options: {
+								width: '100%',
+							}
+						}
+					});
+					dataChart2.execute();
+					/* Create the second DataChart for top countries over the past 30 days.
+				* It will be rendered inside an element with the id "chart-2-container".
+				*/
+					var dataChart4 = new gapi.analytics.googleCharts.DataChart({
+						query: {
+							'ids': id, // The Demos & Tools website view.
+							metrics: 'ga:sessions',
+							dimensions: 'ga:city',
+							'start-date': '365daysAgo',
+							'end-date': 'yesterday',
+							'max-results': 10,
+							sort: '-ga:sessions'
+						},
+						chart: {
+							container: 'chart-4-container',
+							type: 'PIE',
+							options: {
+								width: '100%',
+							}
+						}
+					});
+					dataChart4.execute();
+				});
+				</script>
+			{% endblock js %}

@@ -1,0 +1,118 @@
+{% extends "templates/layouts/base.html" %} {% block title %}Statistik Pengunjung Pustaka Unsyiah{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script>
+(function(w,d,s,g,js,fs){
+  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
+  js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
+  js.src='https://apis.google.com/js/platform.js';
+  fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
+}(window,document,'script'));
+</script>
+
+    <script>
+      gapi.analytics.ready(function() {
+
+        /**
+         * Authorize the user with an access token obtained server side.
+         */
+        gapi.analytics.auth.authorize({
+          'serverAuth': {
+            'access_token': {{ access_token }}
+          }
+        });
+
+
+        /**
+         * Creates a new DataChart instance showing sessions over the past 30 days.
+         * It will be rendered inside an element with the id "chart-1-container".
+         */
+        var dataChart1 = new gapi.analytics.googleCharts.DataChart({
+          query: {
+            'ids': 'ga:109231694', // The Demos & Tools website view.
+            'start-date': '30daysAgo',
+            'end-date': 'yesterday',
+            'metrics': 'ga:sessions,ga:users',
+            'dimensions': 'ga:date'
+          },
+          chart: {
+            'container': 'chart-1-container',
+            'type': 'LINE',
+            'options': {
+              'width': '100%'
+            }
+          }
+        });
+        dataChart1.execute();
+
+
+        /**
+         * Creates a new DataChart instance showing top 5 most popular demos/tools
+         * amongst returning users only.
+         * It will be rendered inside an element with the id "chart-3-container".
+         */
+        var dataChart2 = new gapi.analytics.googleCharts.DataChart({
+          query: {
+            'ids': 'ga:109231694', // The Demos & Tools website view.
+            'start-date': '30daysAgo',
+            'end-date': 'yesterday',
+            'metrics': 'ga:pageviews',
+            'dimensions': 'ga:pagePathLevel1',
+            'sort': '-ga:pageviews',
+            'filters': 'ga:pagePathLevel1!=/',
+            'max-results': 7
+          },
+          chart: {
+            'container': 'chart-2-container',
+            'type': 'PIE',
+            'options': {
+              'width': '100%',
+              'pieHole': 4 / 9,
+            }
+          }
+        });
+        dataChart2.execute();
+
+      });
+    </script>
+
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+  {% endblock %} <!-- ./block head-->
+  {% block content %}
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Gapust</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="https://etd.unsyiah.ac.id" target="_blank">Electrical Thesis and Disertation (ETD)</a></li>
+      </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container-fluid -->
+</nav>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span6">
+      <div class="panel panel-danger">
+        <div class="panel-heading">Maaf, Halaman tidak ditemukan!</div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content%}
