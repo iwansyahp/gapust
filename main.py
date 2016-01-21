@@ -36,13 +36,13 @@ class EtdAnalyticPage(webapp2.RequestHandler):
     template = jinja_env.get_template('templates/etdserveanalytics.html')
     self.response.out.write(template.render(temp_val))
 
-class JurnalAnalyticPage(webapp2.RequestHandler):
+class OpenAccessAnalyticPage(webapp2.RequestHandler):
   """ Halaman data analytics yang terkumpul (menggunakan server side auth). """
   def get(self):
     
     access_token = service_account.get_access_token()
-    temp_val = {'access_token': access_token, 'situs': 'E-Journal Unsyiah'}    
-    template = jinja_env.get_template('templates/jurnalserveanalytics.html')
+    temp_val = {'access_token': access_token, 'situs': 'Open Access Unsyiah'}    
+    template = jinja_env.get_template('templates/openaccessserveanalytics.html')
     self.response.out.write(template.render(temp_val))
 
 class UilisAnalyticPage(webapp2.RequestHandler):
@@ -60,9 +60,9 @@ class OpacRedirectPage(webapp2.RequestHandler):
 class EtdRedirectPage(webapp2.RequestHandler):
   def get(self):
     self.redirect("http://uilis.unsyiah.ac.id/etd")
-class JurnalRedirectPage(webapp2.RequestHandler):
+class OpenAccessRedirectPage(webapp2.RequestHandler):
   def get(self):
-    self.redirect("http://jurnal.unsyiah.ac.id")
+    self.redirect("http://openaccess.unsyiah.ac.id")
 class UilisRedirectPage(webapp2.RequestHandler):
   def get(self):
     self.redirect("http://uilis.unsyiah.ac.id")
@@ -71,10 +71,10 @@ app = webapp2.WSGIApplication([
   ('/', IndexPage),
   ('/opac', OpacAnalyticPage),
   ('/etd', EtdAnalyticPage),
-  ('/jurnal', JurnalAnalyticPage),
+  ('/openaccess', OpenAccessAnalyticPage),
   ('/uilis', UilisAnalyticPage),
   ('/opac.unsyiah.ac.id', OpacRedirectPage),
   ('/etd.unsyiah.ac.id', EtdRedirectPage),
-  ('/jurnal.unsyiah.ac.id', JurnalRedirectPage),
+  ('/openaccess.unsyiah.ac.id', OpenAccessRedirectPage),
   ('/uilis.unsyiah.ac.id', UilisRedirectPage),
   ])
