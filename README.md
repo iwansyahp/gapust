@@ -12,6 +12,11 @@ Langkah running website
 2. buka folder gapust
 3. pada terminal jalankan: ./runserver.sh
 
+
+Cara deploy
+
+[direktori GAE SDK Python]/appcfg.py update ~/git/gapust/ -A ganalyticspustakaunsyiah -V 1
+
 Website telah siap digunakan, dan dapat diakses pada http://localhost:8080
 Admin: http://localhost:8000
 
